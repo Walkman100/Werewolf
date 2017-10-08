@@ -106,15 +106,16 @@ Module werewolf
     End Sub
     
     Sub Start(players As String, Optional generatePlayers As Boolean = True)
+        If Not IsNumeric(players)
+            Console.WriteLine("""" & players & """ is not a whole number!")
+            Exit Sub
+        End If
+        
         If generatePlayers
-            If IsNumeric(players)
-                playerNames.Clear()
-                For i = 1 to players
-                    playerNames.Add(i)
-                Next
-            Else
-                Console.WriteLine("""" & players & """ is not a number!")
-            End If
+            playerNames.Clear()
+            For i = 1 to players
+                playerNames.Add(i)
+            Next
         End If
         
         j = 0
