@@ -9,19 +9,51 @@ Module werewolf
     Sub Main(args As String())
         If args.Length = 0 Then
             Console.Write("Enter amount of players: ")
-            tmpString = Console.Readline()
-            If isnumeric(tmpString)
-                For i = 1 to tmpString
-                    playerNames.Add(i)
-                Next
-                j = 0
-                For Each i In GenerateRandomList(tmpString)
-                    Console.WriteLine(playerNames(j) & ": " & i)
-                    j += 1
-                Next
-            Else
-                Console.WriteLine("""" & tmpString & """ is not a number!")
-            End If
+            Start(Console.Readline())
+        Else
+            Select case args(0)
+                Case "-h"
+                    Console.Writeline("Werewolf - github.com/Walkman100/Werewolf")
+                    WriteUsage()
+                Case "-p"
+                    If args.length > 1 Then : Start(args(1))
+                    Else : Console.Write("Enter amount of players: ")
+                           Start(Console.Readline())
+                    End If
+                Case Else
+                    Console.Writeline("Unrecognised flag """ & args(0) & """!")
+                    WriteUsage()
+            End Select
+        End If
+    End Sub
+
+    Sub WriteUsage()
+        Dim flags As String = " [-h|-p [number of players]]"
+        Dim programPath As String = System.Reflection.Assembly.GetExecutingAssembly().CodeBase
+        If My.Computer.Info.OSPlatform = "Unix" Then
+            Console.Writeline("Usage: mono " & programPath.Substring(programPath.LastIndexOf("/") +1) & flags)
+        ElseIf My.Computer.Info.OSPlatform = "Win32NT" Then
+            Console.Writeline("Usage: " & programPath.Substring(programPath.LastIndexOf("/") +1) & flags)
+        Else
+            Console.Writeline("Unrecognised platform """ & My.Computer.Info.OSPlatform & """! Please report at https://github.com/Walkman100/Werewolf/issues/new")
+            Console.Writeline("Default usage info: " & System.Diagnostics.Process.GetCurrentProcess.ProcessName & ".exe" & flags)
+        End If
+    End Sub
+    
+    Sub Start(players As String)
+        If isnumeric(players)
+            playerNames.Clear()
+            For i = 1 to players
+                playerNames.Add(i)
+            Next
+            
+            j = 0
+            For Each i In GenerateRandomList(players)
+                Console.WriteLine(playerNames(j) & ": " & i)
+                j += 1
+            Next
+        Else
+            Console.WriteLine("""" & players & """ is not a number!")
         End If
     End Sub
     
