@@ -1,5 +1,6 @@
 Option Explicit Off
 Imports System.Collections.Generic
+Imports System.IO.File
 
 Module werewolf
     Dim tmpString As String = ""
@@ -11,17 +12,11 @@ Module werewolf
             Console.Write("Use Player nAmes or Numbers? (p/a/n/#): ")
             tmpString = Console.ReadKey().Key.ToString
             Console.Writeline()
-            If tmpString = "P" Or tmpString = "A"
-                Console.WriteLine("Enter player names. Type ""done"" when done.")
-                tmpString = Console.ReadLine()
-                Do Until tmpString = "done"
-                    playerNames.Add(tmpString)
-                    tmpString = Console.ReadLine()
-                Loop
-                Start(playerNames.Count, False)
-            ElseIf tmpString = "N" Or tmpString = "0" ' # relates to 0 for some reason. So does \ and probably a few other characters but that's fine.
+            If tmpString = "N" Or tmpString = "0" ' # relates to 0 for some reason. So does \ and probably a few other characters but that's fine.
                 Console.Write("Enter amount of players: ")
                 Start(Console.Readline())
+            ElseIf tmpString = "P" Or tmpString = "A"
+                InputPlayerNames()
             Else
                 Console.Writeline("""" & tmpString & """ isn't any of the valid inputs!")
             End If
@@ -41,12 +36,13 @@ Module werewolf
                             playerNames.Add(name)
                         Next
                         Start(playerNames.Count, False)
-                    Else : Console.WriteLine("Enter player names. Type ""done"" when done.")
-                           tmpString = Console.ReadLine()
-                           Do Until tmpString = "done"
-                               playerNames.Add(tmpString)
-                               tmpString = Console.ReadLine()
-                           Loop
+                    Else : InputPlayerNames()
+                    End If
+                Case "-l"
+                    If args.length > 1 Then: LoadPlayerNames(args(1))
+                        Start(playerNames.Count, False)
+                    Else : Console.Write("Enter path to load names from: ")
+                           LoadPlayerNames(Console.ReadLine())
                            Start(playerNames.Count, False)
                     End If
                 Case Else
@@ -57,7 +53,7 @@ Module werewolf
     End Sub
 
     Sub WriteUsage()
-        Dim flags As String = " [-h|-n [number of players]|-p [playernames seperated by ,]]"
+        Dim flags As String = " [-h|-n [number of players]|-p [playernames seperated by ,]|-l [file to load playernames from]]"
         Dim programPath As String = System.Reflection.Assembly.GetExecutingAssembly().CodeBase
         If My.Computer.Info.OSPlatform = "Unix" Then
             Console.Writeline("Usage: mono " & programPath.Substring(programPath.LastIndexOf("/") +1) & flags)
@@ -66,6 +62,45 @@ Module werewolf
         Else
             Console.Writeline("Unrecognised platform """ & My.Computer.Info.OSPlatform & """! Please report at https://github.com/Walkman100/Werewolf/issues/new")
             Console.Writeline("Default usage info: " & System.Diagnostics.Process.GetCurrentProcess.ProcessName & ".exe" & flags)
+        End If
+    End Sub
+    
+    Sub InputPlayerNames()
+        Console.WriteLine("Enter player names. Type 'done', 'exit' or 'd' when done." _
+            & " Type 'save' or 'save <path>' to save the list of names to file." _
+            & " Type 'load' or 'load <path' to load the list of names from file.")
+        tmpString = Console.ReadLine()
+        Do Until 0 <> 0
+            If tmpString = "done" Or tmpString = "exit" Or tmpString = "d"
+                Exit Do
+            ElseIf tmpString = "save"
+                Console.Write("Enter file name/location to save to: ")
+                tmpString = Console.ReadLine()
+                WriteAllLines(tmpString, playerNames)
+            ElseIf tmpString.StartsWith("save ")
+                WriteAllLines(tmpString.Substring(5), playerNames)
+            ElseIf tmpString = "load"
+                Console.Write("Enter file name/location to load from: ")
+                LoadPlayerNames(Console.ReadLine())
+            ElseIf tmpString.StartsWith("load ")
+                LoadPlayerNames(tmpString.Substring(5))
+            Else
+                playerNames.Add(tmpString)
+            End If
+            tmpString = Console.ReadLine()
+        Loop
+        Start(playerNames.Count, False)
+    End Sub
+    
+    Sub LoadPlayerNames(path As String)
+        If Exists(path)
+            playerNames.Clear()
+            For Each line In ReadLines(path)
+                playerNames.Add(line)
+            Next
+            Console.WriteLine("Loaded " & playerNames.Count() & " names")
+        Else
+            Console.WriteLine("""" & path & """ doesn't exist!")
         End If
     End Sub
     
