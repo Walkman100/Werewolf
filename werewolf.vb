@@ -27,8 +27,8 @@ Module werewolf
                     Console.Writeline("Werewolf - github.com/Walkman100/Werewolf")
                     WriteUsage()
                 Case "-n"
-                    If args.length > 1 Then : Start(args(1))
-                    Else : Console.Write("Enter amount of players: ")
+                    If args.length > 1 Then: Start(args(1))
+                    Else: Console.Write("Enter amount of players: ")
                            Start(Console.ReadLine())
                     End If
                 Case "-p"
@@ -37,12 +37,12 @@ Module werewolf
                             playerNames.Add(name)
                         Next
                         Start(playerNames.Count, False)
-                    Else : InputPlayerNames()
+                    Else: InputPlayerNames()
                     End If
                 Case "-l"
                     If args.length > 1 Then: LoadPlayerNames(args(1))
                         Start(playerNames.Count, False)
-                    Else : Console.Write("Enter path to load names from: ")
+                    Else: Console.Write("Enter path to load names from: ")
                            LoadPlayerNames(Console.ReadLine())
                            Start(playerNames.Count, False)
                     End If
@@ -118,16 +118,87 @@ Module werewolf
             Next
         End If
         
-        j = 0
-        For Each i In GenerateRandomList(players)
-            Console.WriteLine(playerNames(j) & ": " & i)
-            j += 1
-        Next
+        Console.Write("Use Card nAmes or Numbers? (c/a/n/#): ")
+        tmpString = Console.ReadKey().Key.ToString
+        Console.Writeline()
+        If tmpString = "N" Or tmpString = "0" ' # relates to 0 for some reason. So does \ and probably a few other characters but that's fine.
+            j = 0
+            For Each i In GenerateRandomList(players)
+                Console.WriteLine(playerNames(j) & ": " & i)
+                j += 1
+            Next
+        ElseIf tmpString = "C" Or tmpString = "A"
+            SelectCards()
+            RandomiseCards(players)
+            j = 0
+            For Each i In cardList
+                Console.WriteLine(playerNames(j) & ": " & i)
+                j += 1
+            Next
+        Else
+            Console.Writeline("""" & tmpString & """ isn't any of the valid inputs!")
+        End If
 
         If My.Computer.Info.OSPlatform = "Win32NT" Then
             Console.Write("Done! Press any key to continue . . . ")
-            Console.ReadKey(True)
+            Console.ReadKey()
         End If
+    End Sub
+    
+    Sub SelectCards()
+        Dim selectedIndex As Int32 = 1
+        Dim selectedIndexes As New List(Of Int32)
+        selectedIndexes.Add(2)
+        'cardList = ReadCardXML("cards.xml")
+        cardList.Add("Werewolf")
+        cardList.Add("Seer")
+        cardList.Add("Hackmaster")
+        cardList.Add("Witch")
+        Do Until 0 <> 0
+            j = 1
+            For Each card in cardList
+                If selectedIndexes.Contains(j) then
+                    Console.ForegroundColor = ConsoleColor.Yellow
+                End If
+                If selectedIndex = j
+                    Console.BackgroundColor = ConsoleColor.DarkBlue
+                End If
+
+                Console.WriteLine("######################")
+                Console.WriteLine("# " & card.PadRight(19) & "#")
+                Console.WriteLine("######################")
+
+                Console.BackgroundColor = ConsoleColor.Black
+                Console.ForegroundColor = ConsoleColor.Green
+                j += 1
+            Next
+            Dim pressedKey As Int32 = Console.ReadKey(True).Key
+            Select Case pressedKey
+                Case ConsoleKey.UpArrow
+                    If selectedIndex > 1 Then selectedIndex -= 1
+                Case ConsoleKey.DownArrow
+                    If selectedIndex < cardList.Count Then selectedIndex += 1
+                Case ConsoleKey.Spacebar
+                    If selectedIndexes.Contains(selectedIndex) Then: _
+                        selectedIndexes.Remove(selectedIndex)
+                    Else: selectedIndexes.Add(selectedIndex)
+                    End If
+                Case ConsoleKey.Q
+                    Exit Do
+                Case ConsoleKey.D
+                    Exit Do
+                Case ConsoleKey.E
+                    Exit Do
+                Case ConsoleKey.Escape
+                    Exit Do
+            End Select
+        Loop
+        Console.ResetColor
+        'set cardList to list of selected indexes variable with cards extracted from list of cards variable
+    End Sub
+    
+    Sub RandomiseCards(players As Int32)
+        
     End Sub
     
     ''' <summary>Generates a list of unique random numbers</summary>
