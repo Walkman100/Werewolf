@@ -14,12 +14,13 @@ Module werewolf
             Console.Writeline()
             If tmpString = "N" Or tmpString = "0" ' # relates to 0 for some reason. So does \ and probably a few other characters but that's fine.
                 Console.Write("Enter amount of players: ")
-                Start(Console.Readline())
+                Start(Console.ReadLine())
             ElseIf tmpString = "P" Or tmpString = "A"
                 InputPlayerNames()
             Else
                 Console.Writeline("""" & tmpString & """ isn't any of the valid inputs!")
             End If
+            
         Else
             Select case args(0)
                 Case "-h"
@@ -28,10 +29,10 @@ Module werewolf
                 Case "-n"
                     If args.length > 1 Then : Start(args(1))
                     Else : Console.Write("Enter amount of players: ")
-                           Start(Console.Readline())
+                           Start(Console.ReadLine())
                     End If
                 Case "-p"
-                    If args.length > 1 Then : 
+                    If args.length > 1 Then
                         For Each name In args(1).Split(",")
                             playerNames.Add(name)
                         Next
@@ -106,7 +107,7 @@ Module werewolf
     
     Sub Start(players As String, Optional generatePlayers As Boolean = True)
         If generatePlayers
-            If isnumeric(players)
+            If IsNumeric(players)
                 playerNames.Clear()
                 For i = 1 to players
                     playerNames.Add(i)
@@ -121,6 +122,11 @@ Module werewolf
             Console.WriteLine(playerNames(j) & ": " & i)
             j += 1
         Next
+
+        If My.Computer.Info.OSPlatform = "Win32NT" Then
+            Console.Write("Done! Press any key to continue . . . ")
+            Console.ReadKey(True)
+        End If
     End Sub
     
     ''' <summary>Generates a list of unique random numbers</summary>
