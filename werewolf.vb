@@ -4,6 +4,7 @@ Imports System.IO.File
 
 Module werewolf
     Dim tmpString As String = ""
+    Dim cardOptions As String = ""
     Dim playerNames As New List(Of String)
     Dim cardList As New List(Of String)
     
@@ -22,6 +23,7 @@ Module werewolf
             End If
             
         Else
+            If args.length > 2 Then cardOptions = args(2)
             Select case args(0)
                 Case "-h"
                     Console.Writeline("Werewolf - github.com/Walkman100/Werewolf")
@@ -54,7 +56,7 @@ Module werewolf
     End Sub
 
     Sub WriteUsage()
-        Dim flags As String = " [-h|-n [number of players]|-p [playernames seperated by ,]|-l [file to load playernames from]]"
+        Dim flags As String = " [-h|-n [number of players]|-p [playernames seperated by ,]|-l [file to load playernames from]] [-c|-a|-n|-# (Use Card nAmes or Numbers)]"
         Dim programPath As String = System.Reflection.Assembly.GetExecutingAssembly().CodeBase
         If My.Computer.Info.OSPlatform = "Unix" Then
             Console.Writeline("Usage: mono " & programPath.Substring(programPath.LastIndexOf("/") +1) & flags)
@@ -118,9 +120,21 @@ Module werewolf
             Next
         End If
         
-        Console.Write("Use Card nAmes or Numbers? (c/a/n/#): ")
-        tmpString = Console.ReadKey().Key.ToString
-        Console.Writeline()
+        If cardOptions = ""
+            Console.Write("Use Card nAmes or Numbers? (c/a/n/#): ")
+            tmpString = Console.ReadKey().Key.ToString
+            Console.Writeline()
+        Else
+            If cardOptions.StartsWith("-") And cardOptions.Length > 1
+                tmpString = cardOptions.Substring(1).ToUpper
+                If tmpString = "#" Then tmpString = "0"
+            Else
+                Console.Write("Use Card nAmes or Numbers? (c/a/n/#): ")
+                tmpString = Console.ReadKey().Key.ToString
+                Console.Writeline()
+            End If
+        End If
+
         If tmpString = "N" Or tmpString = "0" ' # relates to 0 for some reason. So does \ and probably a few other characters but that's fine.
             j = 0
             For Each i In GenerateRandomList(players)
@@ -149,6 +163,7 @@ Module werewolf
         Dim selectedIndex As Int32 = 1
         Dim selectedIndexes As New List(Of Int32)
         selectedIndexes.Add(2)
+        cardList.Clear()
         'cardList = ReadCardXML("cards.xml")
         cardList.Add("Werewolf")
         cardList.Add("Seer")
