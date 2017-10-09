@@ -183,6 +183,11 @@ Module werewolf
                         selectedIndexes.Remove(selectedIndex)
                     Else: selectedIndexes.Add(selectedIndex)
                     End If
+                Case ConsoleKey.Enter
+                    If selectedIndexes.Contains(selectedIndex) Then: _
+                        selectedIndexes.Remove(selectedIndex)
+                    Else: selectedIndexes.Add(selectedIndex)
+                    End If
                 Case ConsoleKey.Q
                     Exit Do
                 Case ConsoleKey.D
@@ -192,6 +197,15 @@ Module werewolf
                 Case ConsoleKey.Escape
                     Exit Do
             End Select
+            Try
+                Console.SetCursorPosition(0, Console.CursorTop - (cardList.Count *3) )
+            Catch
+                Try
+                    Console.SetCursorPosition(0, 0)
+                Catch
+                    ' Just append as usual if we can't move the cursor
+                End Try
+            End Try
         Loop
         Console.ResetColor
         'set cardList to list of selected indexes variable with cards extracted from list of cards variable
