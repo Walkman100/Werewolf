@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<werewolf>
+  <cards>
+    <card team="Solo" name="Assassin" description="On the first night, pick someone to be a target. If that person is killed, you win." />
+    <card team="Solo" name="Husbando/Zuma" description="Each night, pick a player to be a wife. If you make it through a day/night cycle with 3 wives, you win." />
+    <card team="Villagers" name="Cupid" description="On the first night, pick two people to be lovers. If one of them dies, the other one goes too." />
+    <card team="Villagers" name="Witch" description="Has a potion of life and a potion of death. Can be used once each throughout the game. potion of life can save someone who is killed at night, potion of death can kill someone at night." />
+    <card team="Villagers/Werewolves" name="Bloody Mary" description="joins the Villagers team if they get killed by Werewolves, joins the Werewolves team if they get killed by villagers. can target one person per night to see if they are someone they are trying to kill, if the targeted person is, then they die." />
+    <card team="Villagers" name="Seer" description="can choose one person each night to see if they are a werewolf." />
+    <card team="Villagers" name="Mystic Seer" description="same as the seer except they get told exactly what the targeted person is." />
+    <card team="Villagers" name="Bodyguard" description="can choose one person per night to protect from the werewolves and sometimes bloody mary and the witch's potion of death" />
+    <card team="Werewolves" name="Werewolf" description="chooses, as a team with any other wolves, one person to die per night." />
+    <card team="Werewolves" name="Alpha Wolf" description="on the first night, chooses someone to be a wolf as well as their original role." />
+    <card team="Cult" name="Cult Leader" description="chooses one person per night to be indoctrinated into the cult. once everyone is in the cult, the cult wins." />
+    <card team="Villagers" name="Frankenstein's Monster" description="gets the powers of any roles on the villagers team once they die." />
+    <card team="Villagers" name="Martial Artist" description="has a 50/50 chance to defend themselves if they get attacked, if they manage to, they'll beat up one of the werewolves (i.e. kill the werewolf)" />
+  </cards>
+</werewolf>
