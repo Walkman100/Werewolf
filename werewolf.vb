@@ -1,12 +1,13 @@
 Option Explicit Off
 Imports System.Collections.Generic
 Imports System.IO.File
+Imports System.Xml
 
 Module werewolf
     Dim tmpString As String = ""
     Dim cardOptions As String = ""
     Dim playerNames As New List(Of String)
-    Dim cardList As New List(Of String)
+    Dim cardList As New List(Of Dictionary(Of String, String))
     
     Sub Main(args As String())
         If args.Length = 0 Then
@@ -145,9 +146,11 @@ Module werewolf
             SelectCards()
             RandomiseCards(players)
             j = 0
-            For Each i In cardList
-                Console.WriteLine(playerNames(j) & ": " & i)
-                j += 1
+            For Each cardDict In cardList
+                If cardDict.ContainsKey("name")
+                    Console.WriteLine(playerNames(j) & ": " & cardDict.Item("name"))
+                    j += 1
+                End If
             Next
         Else
             Console.Writeline("""" & tmpString & """ isn't any of the valid inputs!")
@@ -162,16 +165,12 @@ Module werewolf
     Sub SelectCards()
         Dim selectedIndex As Int32 = 1
         Dim selectedIndexes As New List(Of Int32)
-        selectedIndexes.Add(2)
         cardList.Clear()
-        'cardList = ReadCardXML("cards.xml")
-        cardList.Add("Werewolf")
-        cardList.Add("Seer")
-        cardList.Add("Hackmaster")
-        cardList.Add("Witch")
+        cardList = ReadCardXML("cards.xml")
+
         Do Until 0 <> 0
             j = 1
-            For Each card in cardList
+            For Each cardDict in cardList
                 If selectedIndexes.Contains(j) then
                     Console.ForegroundColor = ConsoleColor.Yellow
                 End If
@@ -179,9 +178,9 @@ Module werewolf
                     Console.BackgroundColor = ConsoleColor.DarkBlue
                 End If
 
-                Console.WriteLine("######################")
-                Console.WriteLine("# " & card.PadRight(19) & "#")
-                Console.WriteLine("######################")
+                Console.WriteLine("##########################")
+                Console.WriteLine("# " & cardDict.Item("name").PadRight(23) & "#")
+                Console.WriteLine("##########################")
 
                 Console.BackgroundColor = ConsoleColor.Black
                 Console.ForegroundColor = ConsoleColor.Green
@@ -248,6 +247,47 @@ Module werewolf
         Next
 
         return randomList
+    End Function
+
+    Function ReadCardXML(path As String) As List(Of Dictionary(Of String, String))
+        Dim reader As XmlReader = XmlReader.Create(path)
+        Try
+            reader.Read()
+        Catch ex As XmlException
+            reader.Close
+            Exit Function
+        End Try
+        
+        Dim elementAttribute As String
+        Dim returnList As New List(Of Dictionary(Of String, String))
+        If reader.IsStartElement() AndAlso reader.Name = "werewolf" Then
+            If reader.Read AndAlso reader.IsStartElement() AndAlso reader.Name = "cards" Then
+                While reader.IsStartElement
+                    If reader.Read AndAlso reader.IsStartElement() AndAlso reader.Name = "card" Then
+                        Dim tmpDict As New Dictionary(Of String, String)
+                        
+                        elementAttribute = reader("name")
+                        If elementAttribute IsNot Nothing Then
+                            tmpDict.Add("name", elementAttribute)
+
+                            elementAttribute = reader("description")
+                            If elementAttribute IsNot Nothing Then
+                                tmpDict.Add("description", elementAttribute)
+                            End If
+                            
+                            elementAttribute = reader("team")
+                            If elementAttribute IsNot Nothing Then
+                                tmpDict.Add("team", elementAttribute)
+                            End If
+                        End If
+                        
+                        returnList.Add(tmpDict)
+                    End If
+                End While
+            End If
+        End If
+        reader.Close
+        return returnList
     End Function
     
     ' Console commands:
