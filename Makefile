@@ -1,5 +1,5 @@
 VBC = vbnc
-VBCFLAGS = -nologo -quiet -utf8output -rootnamespace:werewolf -target:exe
+VBCFLAGS = -nologo -quiet -utf8output -rootnamespace:werewolf -target:exe /win32icon:characters-square.ico
 VBFILES = werewolf.vb AssemblyInfo.vb
 
 werewolf: $(VBFILES)
