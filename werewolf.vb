@@ -8,6 +8,7 @@ Module werewolf
     Dim cardOptions As String = ""
     Dim playerNames As New List(Of String)
     Dim cardList As New List(Of Dictionary(Of String, String))
+    Dim selectedCards As New List(Of Dictionary(Of String, String))
     
     Sub Main(args As String())
         If args.Length = 0 Then
@@ -143,10 +144,11 @@ Module werewolf
                 j += 1
             Next
         ElseIf tmpString = "C" Or tmpString = "A"
+            If cardList.Count = 0 Then cardList = ReadCardXML("cards.xml")
             SelectCards()
             RandomiseCards(players)
             j = 0
-            For Each cardDict In cardList
+            For Each cardDict In selectedCards
                 If cardDict.ContainsKey("name")
                     Console.WriteLine(playerNames(j) & ": " & cardDict.Item("name"))
                     j += 1
@@ -165,8 +167,6 @@ Module werewolf
     Sub SelectCards()
         Dim selectedIndex As Int32 = 1
         Dim selectedIndexes As New List(Of Int32)
-        cardList.Clear()
-        cardList = ReadCardXML("cards.xml")
 
         Do Until 0 <> 0
             j = 1
@@ -222,7 +222,15 @@ Module werewolf
             End Try
         Loop
         Console.ResetColor
-        'set cardList to list of selected indexes variable with cards extracted from list of cards variable
+        
+        selectedCards.Clear()
+        j = 1
+        For Each cardDict in cardList
+            If selectedIndexes.Contains(j) then
+                selectedCards.Add(cardDict)
+            End If
+            j += 1
+        Next
     End Sub
     
     Sub RandomiseCards(players As Int32)
