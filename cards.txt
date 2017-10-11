@@ -1,0 +1,84 @@
+alexander: You aren't on anyone's team until one side is about to lose, and then you join that side. You only win if you haven't been eliminated at the end of the game.
+alpha wolf
+apprentice seer: If the Seer is eliminated, you become the Seer, waking each night to look for Werewolves.
+aura seer: Choose a player each night to see if that player is not a Werewolf or Villager.
+beholder: The first night, learn who the Seer is.
+big bad wolf: Each night, wake with the other Werewolves. If you are still in the game, the Werewolves may eliminate two adjacent players.
+blockchain
+bloody mary: If you are eliminated, each night eliminate either a Villager (if you were eliminated during the day) or a Werewolf (if you were eliminated at night).
+bodyguard: Each night, choose a different player to be protected. That player may not be killed at night.
+bogeyman: If the Werewolves don't agree on a target quickly, you choose a target. You win if all night active players are dead.
+chupacabra: Each night, choose a player. If that player is a werewolf he dies. If the werewolves are dead, you kill any other player.
+count dracula: Each night, pick a player to be a wife. If you make it through a day/night cycle with 3 wives, you win.
+cult leader: Each night, choose a player to join your cult. If all players are in your cult, you win.
+cupid: The first night, choose two players to be linked together. If one of them is eliminated, the other is eliminated as well.
+curator
+cursed: You are a villager unless you are attacked by werewolves, at which time you are a werewolf.
+dire wolf
+diseased: If you are eliminated by Werewolves, they don't get to eliminate anyone the following night.
+doppelgänger: Choose a player on the first night. If that player dies, you get their power (if any).
+dr helgo: The first night, wake up and steal a card from another player. You are now that role.
+dr boom
+dreamwolf: You don't wake up at night with the other Werewolves until after a Werewolf is killed.
+drunk: You are a villager until the third night, when you sober up and your real role is revealed to you.
+fang face: The first night, wake with the other Werewolves. While there are other werewolves in the game, do not wake up with them on subsequent nights.
+father time
+frankenstein's monster: Whenever a special character dies, you get their power.
+fruit brute
+ghost: The first night, you are eliminated. Communicate to the players with single letters each day.
+hackmaster
+hoodlum: Choose two players on the first night. To win, they must be eliminated and you mist still be in the game at the end of the game.
+hunter: If you are eliminated, you may immediately eliminate another player.
+huntress: You may eliminate a player at night once per game.
+insomniac: Each night, learn if at least one of your neighbors has woken up during the night.
+jacole
+kimb
+leprechaun: Each night, you may redirect the werewolves' attack to a player sitting next to their target.
+lone wolf: Each night, wake with the other Werewolves. You only win if you are the last player in the game.
+lycan: You are a Villager, but appear to the Seer as a Werewolf.
+magician
+mason: The first night, wake up to see who the other Mason is.
+martyr
+mayor: Your vote counts twice.
+mentalist
+minion: You know who the Werewolves are, but you do not wake up with them at night.
+mo t. le'sav
+moderator: You are the Moderator.
+mystic wolf
+nostradamus: The first night, predict which team will win. If you are alive at the end of the game and predicted accurately, you win.
+old hag: Each night, choose a player to leave the village during the next day.
+old man
+pacifist: You must always vote for players to not be eliminated.
+P.I. (paranormal investigator): One night per game, choose a player. You'll be told if that player or one of his neighbors is a Werewolf.
+priest: One night per game, choose a player to be protected. That player may not be eliminated at night.
+prince: If you are lynched, reveal your identity and survive.
+princess
+ralph
+revealer
+robber
+sam
+sasquatch: You are on the villager team unless a day ends without a lynch. Then you switch teams to the werewolves.
+seer: Each night choose a player to learn if he is a Villager or a Werewolf.
+sentinel
+sorceress: Each night, look for the Seer. You are on the werewolf team.
+spellcaster: Each night, choose a player who may not speak the following day.
+tanner: You hate your job and your life. You win if you are eliminated.
+teria: Each night, wake with the other Werewolves. The first night, choose a player and learn if that player is the Seer.
+teenage werewolf: Wake with the other werewolves. You must say "werewolf" at least once per day.
+the blob: Each night, the player to the right of The Blob is absorbed. If all players are part of the Blob, you win.
+the count: The first night you are told how many Werewolves are in each half of the village.
+the mummy: Each night, pick a player to be hypnotized. That player will vote the way you do.
+thing (that goes bump in the night): Each night, tap a player sitting immediately next to you.
+time bandit
+tough guy: If the Werewolves attempt to eliminate you, you are not eliminated until the following night.
+troublemaker: One night per game, stir up trouble by calling for players to be eliminated the following day.
+vampire: Each night, choose a player. That player is eliminated when a player gets their 2nd accusation the next day.
+village idiot: You always vote for players to be eliminated.
+villager: Find the Werewolves and eliminate them.
+virginia woolf: The first night, choose a player to be afraid of you. If you are eliminated, that player is also eliminated.
+werewolf: Each night, wake with the other Werewolves and choose a player to eliminate.
+witch: You may save or eliminate a player at night once each per game.
+wolf cub: Each night, wake with the Werewolves. If you are eliminated, the Werewolves eliminate two players the following night.
+wolf man: You wake with the other Werewolves each night, but the Seer sees you as a Villager.
+wolverine
+zombie: Each night, pick a player and eat their brains. That player may no longer vote.
