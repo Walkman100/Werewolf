@@ -6,9 +6,9 @@ Imports System.Xml
 Module werewolf
     Dim tmpString As String = ""
     Dim cardOptions As String = ""
-    Dim playerNames As New List(Of String)
-    Dim cardList As New List(Of Dictionary(Of String, String))
-    Dim selectedCards As New List(Of Dictionary(Of String, String))
+    Dim lstPlayerNames As New List(Of String)
+    Dim lstCards As New List(Of Dictionary(Of String, String))
+    Dim lstSelectedCards As New List(Of Dictionary(Of String, String))
     
     Sub Main(args As String())
         If args.Length = 0 Then
@@ -38,17 +38,17 @@ Module werewolf
                 Case "-p"
                     If args.length > 1 Then
                         For Each name In args(1).Split(",")
-                            playerNames.Add(name)
+                            lstPlayerNames.Add(name)
                         Next
-                        Start(playerNames.Count, False)
+                        Start(lstPlayerNames.Count, False)
                     Else: InputPlayerNames()
                     End If
                 Case "-l"
                     If args.length > 1 Then: LoadPlayerNames(args(1))
-                        Start(playerNames.Count, False)
+                        Start(lstPlayerNames.Count, False)
                     Else: Console.Write("Enter path to load names from: ")
                            LoadPlayerNames(Console.ReadLine())
-                           Start(playerNames.Count, False)
+                           Start(lstPlayerNames.Count, False)
                     End If
                 Case Else
                     Console.Writeline("Unrecognised flag """ & args(0) & """!")
@@ -81,29 +81,29 @@ Module werewolf
             ElseIf tmpString = "save"
                 Console.Write("Enter file name/location to save to: ")
                 tmpString = Console.ReadLine()
-                WriteAllLines(tmpString, playerNames)
+                WriteAllLines(tmpString, lstPlayerNames)
             ElseIf tmpString.StartsWith("save ")
-                WriteAllLines(tmpString.Substring(5), playerNames)
+                WriteAllLines(tmpString.Substring(5), lstPlayerNames)
             ElseIf tmpString = "load"
                 Console.Write("Enter file name/location to load from: ")
                 LoadPlayerNames(Console.ReadLine())
             ElseIf tmpString.StartsWith("load ")
                 LoadPlayerNames(tmpString.Substring(5))
             Else
-                playerNames.Add(tmpString)
+                lstPlayerNames.Add(tmpString)
             End If
             tmpString = Console.ReadLine()
         Loop
-        Start(playerNames.Count, False)
+        Start(lstPlayerNames.Count, False)
     End Sub
     
     Sub LoadPlayerNames(path As String)
         If Exists(path)
-            playerNames.Clear()
+            lstPlayerNames.Clear()
             For Each line In ReadLines(path)
-                playerNames.Add(line)
+                lstPlayerNames.Add(line)
             Next
-            Console.WriteLine("Loaded " & playerNames.Count() & " names")
+            Console.WriteLine("Loaded " & lstPlayerNames.Count() & " names")
         Else
             Console.WriteLine("""" & path & """ doesn't exist!")
         End If
@@ -116,9 +116,9 @@ Module werewolf
         End If
         
         If generatePlayers
-            playerNames.Clear()
+            lstPlayerNames.Clear()
             For i = 1 to players
-                playerNames.Add(i)
+                lstPlayerNames.Add(i)
             Next
         End If
         
@@ -140,17 +140,17 @@ Module werewolf
         If tmpString = "N" Or tmpString = "0" ' # relates to 0 for some reason. So does \ and probably a few other characters but that's fine.
             j = 0
             For Each i In GenerateRandomList(players)
-                Console.WriteLine(playerNames(j) & ": " & i)
+                Console.WriteLine(lstPlayerNames(j) & ": " & i)
                 j += 1
             Next
         ElseIf tmpString = "C" Or tmpString = "A"
-            If cardList.Count = 0 Then cardList = ReadCardXML("cards.xml")
+            If lstCards.Count = 0 Then lstCards = ReadCardXML("cards.xml")
             SelectCards()
             RandomiseCards(players)
             j = 0
-            For Each cardDict In selectedCards
+            For Each cardDict In lstSelectedCards
                 If cardDict.ContainsKey("name")
-                    Console.WriteLine(playerNames(j) & ": " & cardDict.Item("name"))
+                    Console.WriteLine(lstPlayerNames(j) & ": " & cardDict.Item("name"))
                     j += 1
                 End If
             Next
@@ -165,16 +165,16 @@ Module werewolf
     End Sub
     
     Sub SelectCards()
-        Dim selectedIndex As Int32 = 1
-        Dim selectedIndexes As New List(Of Int32)
+        Dim intSelectedIndex As Int32 = 1
+        Dim lstSelectedIndexes As New List(Of Int32)
         
         Do Until 0 <> 0
             j = 1
-            For Each cardDict in cardList
-                If selectedIndexes.Contains(j) then
+            For Each cardDict in lstCards
+                If lstSelectedIndexes.Contains(j) then
                     Console.ForegroundColor = ConsoleColor.Yellow
                 End If
-                If selectedIndex = j
+                If intSelectedIndex = j
                     Console.BackgroundColor = ConsoleColor.DarkBlue
                 End If
                 
@@ -189,18 +189,18 @@ Module werewolf
             Dim pressedKey As Int32 = Console.ReadKey(True).Key
             Select Case pressedKey
                 Case ConsoleKey.UpArrow
-                    If selectedIndex > 1 Then selectedIndex -= 1
+                    If intSelectedIndex > 1 Then intSelectedIndex -= 1
                 Case ConsoleKey.DownArrow
-                    If selectedIndex < cardList.Count Then selectedIndex += 1
+                    If intSelectedIndex < lstCards.Count Then intSelectedIndex += 1
                 Case ConsoleKey.Spacebar
-                    If selectedIndexes.Contains(selectedIndex) Then: _
-                        selectedIndexes.Remove(selectedIndex)
-                    Else: selectedIndexes.Add(selectedIndex)
+                    If lstSelectedIndexes.Contains(intSelectedIndex) Then: _
+                        lstSelectedIndexes.Remove(intSelectedIndex)
+                    Else: lstSelectedIndexes.Add(intSelectedIndex)
                     End If
                 Case ConsoleKey.Enter
-                    If selectedIndexes.Contains(selectedIndex) Then: _
-                        selectedIndexes.Remove(selectedIndex)
-                    Else: selectedIndexes.Add(selectedIndex)
+                    If lstSelectedIndexes.Contains(intSelectedIndex) Then: _
+                        lstSelectedIndexes.Remove(intSelectedIndex)
+                    Else: lstSelectedIndexes.Add(intSelectedIndex)
                     End If
                 Case ConsoleKey.Q
                     Exit Do
@@ -212,7 +212,7 @@ Module werewolf
                     Exit Do
             End Select
             Try
-                Console.SetCursorPosition(0, Console.CursorTop - (cardList.Count *3) )
+                Console.SetCursorPosition(0, Console.CursorTop - (lstCards.Count *3) )
             Catch
                 Try
                     Console.SetCursorPosition(0, 0)
@@ -223,57 +223,57 @@ Module werewolf
         Loop
         Console.ResetColor
         
-        selectedCards.Clear()
+        lstSelectedCards.Clear()
         j = 1
-        For Each cardDict in cardList
-            If selectedIndexes.Contains(j) then
-                selectedCards.Add(cardDict)
+        For Each cardDict in lstCards
+            If lstSelectedIndexes.Contains(j) then
+                lstSelectedCards.Add(cardDict)
             End If
             j += 1
         Next
     End Sub
     
     Sub RandomiseCards(players As Int32)
-        Dim returnList As New List(Of Dictionary(Of String, String))
+        Dim lstReturnCards As New List(Of Dictionary(Of String, String))
         
         Dim rng As New Random()
         Dim randomNumber As Int32
         
-        If players > selectedCards.Count()
-            Do Until selectedCards.Count() = players
-                randomNumber = rng.Next(cardList.Count())
-                selectedCards.Add(cardList(randomNumber))
+        If players > lstSelectedCards.Count()
+            Do Until lstSelectedCards.Count() = players
+                randomNumber = rng.Next(lstCards.Count())
+                lstSelectedCards.Add(lstCards(randomNumber))
             Loop
-            ' add more random cards from cardList
+            ' add more random cards from lstCards
         End If
         
         For i = 1 to players
-            randomNumber = rng.Next(selectedCards.Count())
-            returnList.Add(selectedCards(randomNumber))
-            selectedCards.RemoveAt(randomNumber)
+            randomNumber = rng.Next(lstSelectedCards.Count())
+            lstReturnCards.Add(lstSelectedCards(randomNumber))
+            lstSelectedCards.RemoveAt(randomNumber)
         Next
 
-        selectedCards = returnList
+        lstSelectedCards = lstReturnCards
     End Sub
     
     ''' <summary>Generates a list of unique random numbers</summary>
     ''' <param name="size">the size of the list to generate</param>
     ''' <returns>a randomised list</returns>
     Function GenerateRandomList(size As Int32) As List(Of Int32)
-        Dim initialList As New List(Of Int32)
-        Dim randomList As New List(Of Int32)
+        Dim lstInitial As New List(Of Int32)
+        Dim lstRandom As New List(Of Int32)
         For i = 1 to size
-            initialList.Add(i)
+            lstInitial.Add(i)
         Next
         Dim rng As New Random()
         Dim randomNumber As Int32
         For i = 1 to size
-            randomNumber = rng.Next(initialList.Count())
-            randomList.Add(initialList(randomNumber)) ' initialList.Item()
-            initialList.RemoveAt(randomNumber)
+            randomNumber = rng.Next(lstInitial.Count())
+            lstRandom.Add(lstInitial(randomNumber)) ' lstInitial.Item()
+            lstInitial.RemoveAt(randomNumber)
         Next
         
-        return randomList
+        return lstRandom
     End Function
     
     Function ReadCardXML(path As String) As List(Of Dictionary(Of String, String))
@@ -286,7 +286,7 @@ Module werewolf
         End Try
         
         Dim elementAttribute As String
-        Dim returnList As New List(Of Dictionary(Of String, String))
+        Dim lstReturnCards As New List(Of Dictionary(Of String, String))
         If reader.IsStartElement() AndAlso reader.Name = "werewolf" Then
             If reader.Read AndAlso reader.IsStartElement() AndAlso reader.Name = "cards" Then
                 While reader.IsStartElement
@@ -308,18 +308,12 @@ Module werewolf
                             End If
                         End If
                         
-                        returnList.Add(tmpDict)
+                        lstReturnCards.Add(tmpDict)
                     End If
                 End While
             End If
         End If
         reader.Close
-        return returnList
+        return lstReturnCards
     End Function
-    
-    ' Console commands:
-    '  Console.Write("text")
-    '  Console.WriteLine("text")
-    '  text = Console.ReadLine("text")
-    '  character = Console.ReadKey("text")
 End Module
