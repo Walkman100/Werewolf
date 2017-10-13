@@ -49,7 +49,7 @@ Nostradamus: The first night, predict which team will win. If you are alive at t
 Old Hag: Each night, choose a player to leave the village during the next day.
 Old Man: 
 Pacifist: You must always vote for players to not be eliminated.
-P.I. (paranormal investigator): One night per game, choose a player. You'll be told if that player or one of his neighbors is a Werewolf.
+P.I. (Paranormal Investigator): One night per game, choose a player. You'll be told if that player or one of his neighbors is a Werewolf.
 Priest: One night per game, choose a player to be protected. That player may not be eliminated at night.
 Prince: If you are lynched, reveal your identity and survive.
 Princess: 

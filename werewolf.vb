@@ -234,7 +234,22 @@ Module werewolf
     End Sub
     
     Sub RandomiseCards(players As Int32)
+        Dim returnList As New List(Of Dictionary(Of String, String))
         
+        Dim rng As New Random()
+        Dim randomNumber As Int32
+        
+        If players > selectedCards.Count()
+            ' add more random cards from cardList
+        End If
+
+        For i = 1 to players
+            randomNumber = rng.Next(selectedCards.Count())
+            returnList.Add(selectedCards(randomNumber))
+            selectedCards.RemoveAt(randomNumber)
+        Next
+
+        selectedCards = returnList
     End Sub
     
     ''' <summary>Generates a list of unique random numbers</summary>
