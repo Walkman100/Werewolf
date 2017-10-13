@@ -27,15 +27,14 @@ Module werewolf
         Else
             If args.length > 2 Then cardOptions = args(2)
             Select case args(0)
-                Case "-h"
-                    Console.Writeline("Werewolf - github.com/Walkman100/Werewolf")
+                Case "-h", "--help"
                     WriteUsage()
-                Case "-n"
+                Case "-n", "--numbers", "-#", "--amount"
                     If args.length > 1 Then: Start(args(1))
                     Else: Console.Write("Enter amount of players: ")
                            Start(Console.ReadLine())
                     End If
-                Case "-p"
+                Case "-p", "--players", "-a", "--names"
                     If args.length > 1 Then
                         For Each name In args(1).Split(",")
                             lstPlayerNames.Add(name)
@@ -43,7 +42,7 @@ Module werewolf
                         Start(lstPlayerNames.Count, False)
                     Else: InputPlayerNames()
                     End If
-                Case "-l"
+                Case "-l", "--load", "-f", "--file"
                     If args.length > 1 Then: LoadPlayerNames(args(1))
                         Start(lstPlayerNames.Count, False)
                     Else: Console.Write("Enter path to load names from: ")
@@ -58,7 +57,7 @@ Module werewolf
     End Sub
     
     Sub WriteUsage()
-        Dim flags As String = " [-h|-n [number of players]|-p [playernames seperated by ,]|-l [file to load playernames from]] [-c|-a|-n|-# (Use Card nAmes or Numbers)]"
+        Dim flags As String = " [OPTION] [CARDOPTION]" & vbNewLine & "Tools to help with Werewolf Narrating - https://github.com/Walkman100/Werewolf" & vbNewLine
         Dim programPath As String = System.Reflection.Assembly.GetExecutingAssembly().CodeBase
         If My.Computer.Info.OSPlatform = "Unix" Then
             Console.Writeline("Usage: mono " & programPath.Substring(programPath.LastIndexOf("/") +1) & flags)
@@ -68,6 +67,27 @@ Module werewolf
             Console.Writeline("Unrecognised platform """ & My.Computer.Info.OSPlatform & """! Please report at https://github.com/Walkman100/Werewolf/issues/new")
             Console.Writeline("Default usage info: " & System.Diagnostics.Process.GetCurrentProcess.ProcessName & ".exe" & flags)
         End If
+        
+        flags  = " -h, --help".PadRight(35)                        & " Show this help" & vbNewLine
+        flags &= " -n, --numbers [number of players]".PadRight(35) & " Use player numbers" & vbNewLine
+        flags &= " -#, --amount [number of players]".PadRight(35) & "  Same as -n" & vbNewLine
+        flags &= " -p, --players [playernames]".PadRight(35) & " Use player names. `playernames` must be comma-seperated" & vbNewLine
+        flags &= " -a, --names [playernames]".PadRight(35) & "  Same as -p" & vbNewLine
+        flags &= " -l, --load [file]".PadRight(35) & " Use player names and load from `file`" & vbNewLine
+        flags &= " -f, --file [file]".PadRight(35) & "  Same as -l" & vbNewLine & vbNewLine
+        flags &= "CARDOPTIONS: (command argument above has to be supplied to use these)" & vbNewLine
+        flags &= " -c, -a".PadRight(35) & " Use card names" & vbNewLine
+        flags &= " -n, -#".PadRight(35) & " Use card numbers" & vbNewLine
+        flags &= vbNewLine & "Examples:" & vbNewLine
+        If My.Computer.Info.OSPlatform = "Unix" Then
+            flags &= "  mono " & programPath.Substring(programPath.LastIndexOf("/") +1) & " -n 10 -n".PadRight(25) & "Use card numbers for 10 players identified by numbers" & vbNewLine
+            flags &= "  mono " & programPath.Substring(programPath.LastIndexOf("/") +1) & " -p Larry,Jane,Robert -c".PadRight(25) & "Use card names for 3 players identified by names"
+        ElseIf My.Computer.Info.OSPlatform = "Win32NT" Then
+            flags &= "  " & programPath.Substring(programPath.LastIndexOf("/") +1) & " -n 10 -n".PadRight(25) & "Use card numbers for 10 players identified by numbers" & vbNewLine
+            flags &= "  " & programPath.Substring(programPath.LastIndexOf("/") +1) & " -p Larry,Jane,Robert -c".PadRight(25) & "Use card names for 3 players identified by names"
+        End If
+        
+        Console.WriteLine(flags)
     End Sub
     
     Sub InputPlayerNames()
