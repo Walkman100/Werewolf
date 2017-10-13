@@ -188,27 +188,16 @@ Module werewolf
             Next
             Dim pressedKey As Int32 = Console.ReadKey(True).Key
             Select Case pressedKey
-                Case ConsoleKey.UpArrow
+                Case ConsoleKey.UpArrow, ConsoleKey.LeftArrow
                     If intSelectedIndex > 1 Then intSelectedIndex -= 1
-                Case ConsoleKey.DownArrow
+                Case ConsoleKey.DownArrow, ConsoleKey.RightArrow
                     If intSelectedIndex < lstCards.Count Then intSelectedIndex += 1
-                Case ConsoleKey.Spacebar
+                Case ConsoleKey.Spacebar, ConsoleKey.Enter
                     If lstSelectedIndexes.Contains(intSelectedIndex) Then: _
                         lstSelectedIndexes.Remove(intSelectedIndex)
                     Else: lstSelectedIndexes.Add(intSelectedIndex)
                     End If
-                Case ConsoleKey.Enter
-                    If lstSelectedIndexes.Contains(intSelectedIndex) Then: _
-                        lstSelectedIndexes.Remove(intSelectedIndex)
-                    Else: lstSelectedIndexes.Add(intSelectedIndex)
-                    End If
-                Case ConsoleKey.Q
-                    Exit Do
-                Case ConsoleKey.D
-                    Exit Do
-                Case ConsoleKey.E
-                    Exit Do
-                Case ConsoleKey.Escape
+                Case ConsoleKey.Q, ConsoleKey.D, ConsoleKey.E, ConsoleKey.Escape
                     Exit Do
             End Select
             Try
