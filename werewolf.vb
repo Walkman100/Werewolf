@@ -56,7 +56,7 @@ Module werewolf
             End Select
         End If
     End Sub
-
+    
     Sub WriteUsage()
         Dim flags As String = " [-h|-n [number of players]|-p [playernames seperated by ,]|-l [file to load playernames from]] [-c|-a|-n|-# (Use Card nAmes or Numbers)]"
         Dim programPath As String = System.Reflection.Assembly.GetExecutingAssembly().CodeBase
@@ -136,7 +136,7 @@ Module werewolf
                 Console.Writeline()
             End If
         End If
-
+        
         If tmpString = "N" Or tmpString = "0" ' # relates to 0 for some reason. So does \ and probably a few other characters but that's fine.
             j = 0
             For Each i In GenerateRandomList(players)
@@ -157,7 +157,7 @@ Module werewolf
         Else
             Console.Writeline("""" & tmpString & """ isn't any of the valid inputs!")
         End If
-
+        
         If My.Computer.Info.OSPlatform = "Win32NT" Then
             Console.Write("Done! Press any key to continue . . . ")
             Console.ReadKey()
@@ -167,7 +167,7 @@ Module werewolf
     Sub SelectCards()
         Dim selectedIndex As Int32 = 1
         Dim selectedIndexes As New List(Of Int32)
-
+        
         Do Until 0 <> 0
             j = 1
             For Each cardDict in cardList
@@ -177,11 +177,11 @@ Module werewolf
                 If selectedIndex = j
                     Console.BackgroundColor = ConsoleColor.DarkBlue
                 End If
-
+                
                 Console.WriteLine("##########################")
                 Console.WriteLine("# " & cardDict.Item("name").PadRight(23) & "#")
                 Console.WriteLine("##########################")
-
+                
                 Console.BackgroundColor = ConsoleColor.Black
                 Console.ForegroundColor = ConsoleColor.Green
                 j += 1
@@ -240,9 +240,13 @@ Module werewolf
         Dim randomNumber As Int32
         
         If players > selectedCards.Count()
+            Do Until selectedCards.Count() = players
+                randomNumber = rng.Next(cardList.Count())
+                selectedCards.Add(cardList(randomNumber))
+            Loop
             ' add more random cards from cardList
         End If
-
+        
         For i = 1 to players
             randomNumber = rng.Next(selectedCards.Count())
             returnList.Add(selectedCards(randomNumber))
@@ -268,10 +272,10 @@ Module werewolf
             randomList.Add(initialList(randomNumber)) ' initialList.Item()
             initialList.RemoveAt(randomNumber)
         Next
-
+        
         return randomList
     End Function
-
+    
     Function ReadCardXML(path As String) As List(Of Dictionary(Of String, String))
         Dim reader As XmlReader = XmlReader.Create(path)
         Try
@@ -292,7 +296,7 @@ Module werewolf
                         elementAttribute = reader("name")
                         If elementAttribute IsNot Nothing Then
                             tmpDict.Add("name", elementAttribute)
-
+                            
                             elementAttribute = reader("description")
                             If elementAttribute IsNot Nothing Then
                                 tmpDict.Add("description", elementAttribute)
