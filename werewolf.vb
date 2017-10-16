@@ -27,7 +27,7 @@ Module werewolf
         Else
             If args.length > 2 Then cardOptions = args(2)
             Select case args(0)
-                Case "-h", "--help"
+                Case "-h", "--help", "-?", "/?"
                     WriteUsage()
                 Case "-n", "--numbers", "-#", "--amount"
                     If args.length > 1 Then: Start(args(1))
@@ -57,7 +57,7 @@ Module werewolf
     End Sub
     
     Sub WriteUsage()
-        Dim flags As String = " [OPTION] [CARDOPTION]" & vbNewLine & "Tools to help with Werewolf Narrating - https://github.com/Walkman100/Werewolf" & vbNewLine
+        Dim flags As String = " [OPTION [OPTIONARGUMENT] [CARDOPTION]]" & vbNewLine & "Tools to help with Werewolf Narrating - https://github.com/Walkman100/Werewolf" & vbNewLine
         Dim programPath As String = System.Reflection.Assembly.GetExecutingAssembly().CodeBase
         If My.Computer.Info.OSPlatform = "Unix" Then
             Console.Writeline("Usage: mono " & programPath.Substring(programPath.LastIndexOf("/") +1) & flags)
@@ -71,11 +71,11 @@ Module werewolf
         flags  = " -h, --help".PadRight(35)                        & " Show this help" & vbNewLine
         flags &= " -n, --numbers [number of players]".PadRight(35) & " Use player numbers" & vbNewLine
         flags &= " -#, --amount [number of players]".PadRight(35) & "  Same as -n" & vbNewLine
-        flags &= " -p, --players [playernames]".PadRight(35) & " Use player names. `playernames` must be comma-seperated" & vbNewLine
+        flags &= " -p, --players [playernames]".PadRight(35) & " Use player names. `playernames` must be comma-separated" & vbNewLine
         flags &= " -a, --names [playernames]".PadRight(35) & "  Same as -p" & vbNewLine
         flags &= " -l, --load [file]".PadRight(35) & " Use player names and load from `file`" & vbNewLine
         flags &= " -f, --file [file]".PadRight(35) & "  Same as -l" & vbNewLine & vbNewLine
-        flags &= "CARDOPTIONS: (command argument above has to be supplied to use these)" & vbNewLine
+        flags &= "CARDOPTIONS: (option argument above has to be supplied to use these)" & vbNewLine
         flags &= " -c, -a".PadRight(35) & " Use card names" & vbNewLine
         flags &= " -n, -#".PadRight(35) & " Use card numbers" & vbNewLine
         flags &= vbNewLine & "Examples:" & vbNewLine
