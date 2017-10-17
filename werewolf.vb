@@ -14,14 +14,14 @@ Module werewolf
         If args.Length = 0 Then
             Console.Write("Use Player nAmes or Numbers? (p/a/n/#): ")
             tmpString = Console.ReadKey().Key.ToString
-            Console.Writeline()
+            Console.WriteLine()
             If tmpString = "N" Or tmpString = "0" ' # relates to 0 for some reason. So does \ and probably a few other characters but that's fine.
                 Console.Write("Enter amount of players: ")
                 Start(Console.ReadLine())
             ElseIf tmpString = "P" Or tmpString = "A"
                 InputPlayerNames()
             Else
-                Console.Writeline("""" & tmpString & """ isn't any of the valid inputs!")
+                Console.WriteLine("""" & tmpString & """ isn't any of the valid inputs!")
             End If
             
         Else
@@ -50,7 +50,7 @@ Module werewolf
                            Start(lstPlayerNames.Count, False)
                     End If
                 Case Else
-                    Console.Writeline("Unrecognised flag """ & args(0) & """!")
+                    Console.WriteLine("Unrecognised flag """ & args(0) & """!")
                     WriteUsage()
             End Select
         End If
@@ -60,12 +60,12 @@ Module werewolf
         Dim flags As String = " [OPTION [OPTIONARGUMENT] [CARDOPTION]]" & vbNewLine & "Tools to help with Werewolf Narrating - https://github.com/Walkman100/Werewolf" & vbNewLine
         Dim programPath As String = System.Reflection.Assembly.GetExecutingAssembly().CodeBase
         If My.Computer.Info.OSPlatform = "Unix" Then
-            Console.Writeline("Usage: mono " & programPath.Substring(programPath.LastIndexOf("/") +1) & flags)
+            Console.WriteLine("Usage: mono " & programPath.Substring(programPath.LastIndexOf("/") +1) & flags)
         ElseIf My.Computer.Info.OSPlatform = "Win32NT" Then
-            Console.Writeline("Usage: " & programPath.Substring(programPath.LastIndexOf("/") +1) & flags)
+            Console.WriteLine("Usage: " & programPath.Substring(programPath.LastIndexOf("/") +1) & flags)
         Else
-            Console.Writeline("Unrecognised platform """ & My.Computer.Info.OSPlatform & """! Please report at https://github.com/Walkman100/Werewolf/issues/new")
-            Console.Writeline("Default usage info: " & System.Diagnostics.Process.GetCurrentProcess.ProcessName & ".exe" & flags)
+            Console.WriteLine("Unrecognised platform """ & My.Computer.Info.OSPlatform & """! Please report at https://github.com/Walkman100/Werewolf/issues/new")
+            Console.WriteLine("Default usage info: " & System.Diagnostics.Process.GetCurrentProcess.ProcessName & ".exe" & flags)
         End If
         
         flags  = " -h, --help".PadRight(35)                        & " Show this help" & vbNewLine
@@ -145,7 +145,7 @@ Module werewolf
         If cardOptions = ""
             Console.Write("Use Card nAmes or Numbers? (c/a/n/#): ")
             tmpString = Console.ReadKey().Key.ToString
-            Console.Writeline()
+            Console.WriteLine()
         Else
             If cardOptions.StartsWith("-") And cardOptions.Length > 1
                 tmpString = cardOptions.Substring(1).ToUpper
@@ -153,7 +153,7 @@ Module werewolf
             Else
                 Console.Write("Use Card nAmes or Numbers? (c/a/n/#): ")
                 tmpString = Console.ReadKey().Key.ToString
-                Console.Writeline()
+                Console.WriteLine()
             End If
         End If
         
@@ -175,7 +175,7 @@ Module werewolf
                 End If
             Next
         Else
-            Console.Writeline("""" & tmpString & """ isn't any of the valid inputs!")
+            Console.WriteLine("""" & tmpString & """ isn't any of the valid inputs!")
         End If
         
         If My.Computer.Info.OSPlatform = "Win32NT" Then
@@ -206,6 +206,7 @@ Module werewolf
                 Console.ForegroundColor = ConsoleColor.Green
                 j += 1
             Next
+            
             Dim pressedKey As Int32 = Console.ReadKey(True).Key
             Select Case pressedKey
                 Case ConsoleKey.UpArrow, ConsoleKey.LeftArrow
@@ -220,6 +221,7 @@ Module werewolf
                 Case ConsoleKey.Q, ConsoleKey.D, ConsoleKey.E, ConsoleKey.Escape
                     Exit Do
             End Select
+            
             Try
                 Console.SetCursorPosition(0, Console.CursorTop - (lstCards.Count *3) )
             Catch
