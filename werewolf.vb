@@ -185,34 +185,48 @@ Module werewolf
     End Sub
     
     Sub SelectCards()
-        Dim intSelectedIndex As Int32 = 1
+        Dim intSelectedIndex As Int32 = 1       ' NOTE (IMPORTANT) all the *Index variables here are not index-based! they are 1-based
         Dim lstSelectedIndexes As New List(Of Int32)
+        columns = Console.WindowWidth \ 26 ' 26 is the width of each option
+        totalFullRows = lstCards.Count \ columns
+        lastRowCount = lstCards.Count - (totalFullRows * columns)
         
         Do Until 0 <> 0
-            j = 1
-            For Each cardDict in lstCards
-                If lstSelectedIndexes.Contains(j) then
-                    Console.ForegroundColor = ConsoleColor.Yellow
-                End If
-                If intSelectedIndex = j
-                    Console.BackgroundColor = ConsoleColor.DarkBlue
-                End If
+            For currentRow = 1 To totalFullRows
+                Console.BackgroundColor = ConsoleColor.Black
+                Console.ForegroundColor = ConsoleColor.Green
+                Console.WriteLine(New String("#", 26 * columns))
                 
-                Console.WriteLine("##########################")
-                Console.WriteLine("# " & cardDict.Item("name").PadRight(23) & "#")
-                Console.WriteLine("##########################")
+                For currentColumn = 1 to columns
+                    currentIndex = ( (currentRow - 1) * columns) + currentColumn ' NOT index-based!
+                    If lstSelectedIndexes.Contains(currentIndex) then
+                        Console.ForegroundColor = ConsoleColor.Yellow
+                    Else
+                        Console.ForegroundColor = ConsoleColor.Green
+                    End If
+                    If intSelectedIndex = currentIndex
+                        Console.BackgroundColor = ConsoleColor.DarkBlue
+                    Else
+                        Console.BackgroundColor = ConsoleColor.Black
+                    End If                                  ' \/ Account for 1-basedness
+                    Console.Write("# " & lstCards(currentIndex-1).Item("name").PadRight(23) & "#")
+                Next
                 
                 Console.BackgroundColor = ConsoleColor.Black
                 Console.ForegroundColor = ConsoleColor.Green
-                j += 1
+                Console.WriteLine(vbNewLine & New String("#", 26 * columns))
             Next
             
             Dim pressedKey As Int32 = Console.ReadKey(True).Key
             Select Case pressedKey
-                Case ConsoleKey.UpArrow, ConsoleKey.LeftArrow
+                Case ConsoleKey.LeftArrow
                     If intSelectedIndex > 1 Then intSelectedIndex -= 1
-                Case ConsoleKey.DownArrow, ConsoleKey.RightArrow
+                Case ConsoleKey.RightArrow
                     If intSelectedIndex < lstCards.Count Then intSelectedIndex += 1
+                Case ConsoleKey.UpArrow
+                    If intSelectedIndex > 1 Then intSelectedIndex -= columns
+                Case ConsoleKey.DownArrow
+                    If intSelectedIndex < lstCards.Count Then intSelectedIndex += columns
                 Case ConsoleKey.Spacebar, ConsoleKey.Enter
                     If lstSelectedIndexes.Contains(intSelectedIndex) Then: _
                         lstSelectedIndexes.Remove(intSelectedIndex)
@@ -223,7 +237,7 @@ Module werewolf
             End Select
             
             Try
-                Console.SetCursorPosition(0, Console.CursorTop - (lstCards.Count *3) )
+                Console.SetCursorPosition(0, Console.CursorTop - (totalFullRows *3) )
             Catch
                 Try
                     Console.SetCursorPosition(0, 0)
