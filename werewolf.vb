@@ -185,9 +185,11 @@ Module werewolf
     End Sub
     
     Sub SelectCards()
-        Dim intSelectedIndex As Int32 = 1       ' NOTE (IMPORTANT) all the *Index variables here are not index-based! they are 1-based
+        Dim intSelectedIndex As Int32 = 1 ' NOTE (IMPORTANT) all the *Index variables here are not index-based! they are 1-based
         Dim lstSelectedIndexes As New List(Of Int32)
-        columns = Console.WindowWidth \ 26 ' 26 is the width of each option
+        Dim intCardWidth As Int32 = 26
+        
+        columns = Console.WindowWidth \ intCardWidth
         totalFullRows = lstCards.Count \ columns
         lastRowCount = lstCards.Count - (totalFullRows * columns)
         
@@ -195,7 +197,7 @@ Module werewolf
             For currentRow = 1 To totalFullRows
                 Console.BackgroundColor = ConsoleColor.Black
                 Console.ForegroundColor = ConsoleColor.Green
-                Console.WriteLine(New String("#", 26 * columns))
+                Console.WriteLine(New String("#", intCardWidth * columns))
                 
                 For currentColumn = 1 to columns
                     currentIndex = ( (currentRow - 1) * columns) + currentColumn ' NOT index-based!
@@ -208,13 +210,13 @@ Module werewolf
                         Console.BackgroundColor = ConsoleColor.DarkBlue
                     Else
                         Console.BackgroundColor = ConsoleColor.Black
-                    End If                                  ' \/ Account for 1-basedness
-                    Console.Write("# " & lstCards(currentIndex-1).Item("name").PadRight(23) & "#")
+                    End If                                  ' \/ Account for 1-basedness             \/ Account for leading and trailing #'s and space
+                    Console.Write("# " & lstCards(currentIndex-1).Item("name").PadRight(intCardWidth - 3) & "#")
                 Next
                 
                 Console.BackgroundColor = ConsoleColor.Black
                 Console.ForegroundColor = ConsoleColor.Green
-                Console.WriteLine(vbNewLine & New String("#", 26 * columns))
+                Console.WriteLine(vbNewLine & New String("#", intCardWidth * columns))
             Next
             
             Dim pressedKey As Int32 = Console.ReadKey(True).Key
@@ -269,7 +271,6 @@ Module werewolf
                 randomNumber = rng.Next(lstCards.Count())
                 lstSelectedCards.Add(lstCards(randomNumber))
             Loop
-            ' add more random cards from lstCards
         End If
         
         For i = 1 to players
