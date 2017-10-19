@@ -244,6 +244,57 @@ Module werewolf
                 Console.WriteLine()
             Next
             
+            If lastRowCount <> 0 Then
+                lastRowIndex = totalFullRows * columns
+                For currentColumn = 1 to lastRowCount
+                    currentIndex = lastRowIndex + currentColumn
+                    If lstSelectedIndexes.Contains(currentIndex) then
+                        Console.ForegroundColor = ConsoleColor.Yellow
+                    Else
+                        Console.ForegroundColor = ConsoleColor.Green
+                    End If
+                    If intSelectedIndex = currentIndex
+                        Console.BackgroundColor = ConsoleColor.DarkBlue
+                    Else
+                        Console.BackgroundColor = ConsoleColor.Black
+                    End If
+                    Console.Write(New String("#", intCardWidth))
+                Next
+                Console.WriteLine()
+                
+                For currentColumn = 1 to lastRowCount
+                    currentIndex = lastRowIndex + currentColumn
+                    If lstSelectedIndexes.Contains(currentIndex) then
+                        Console.ForegroundColor = ConsoleColor.Yellow
+                    Else
+                        Console.ForegroundColor = ConsoleColor.Green
+                    End If
+                    If intSelectedIndex = currentIndex
+                        Console.BackgroundColor = ConsoleColor.DarkBlue
+                    Else
+                        Console.BackgroundColor = ConsoleColor.Black
+                    End If                                  ' \/ Account for 1-basedness             \/ Account for leading and trailing #'s and space
+                    Console.Write("# " & lstCards(currentIndex-1).Item("name").PadRight(intCardWidth - 3) & "#")
+                Next
+                Console.WriteLine()
+                
+                For currentColumn = 1 to lastRowCount
+                    currentIndex = lastRowIndex + currentColumn
+                    If lstSelectedIndexes.Contains(currentIndex) then
+                        Console.ForegroundColor = ConsoleColor.Yellow
+                    Else
+                        Console.ForegroundColor = ConsoleColor.Green
+                    End If
+                    If intSelectedIndex = currentIndex
+                        Console.BackgroundColor = ConsoleColor.DarkBlue
+                    Else
+                        Console.BackgroundColor = ConsoleColor.Black
+                    End If
+                    Console.Write(New String("#", intCardWidth))
+                Next
+                Console.WriteLine()
+            End If
+            
             Dim pressedKey As Int32 = Console.ReadKey(True).Key
             Select Case pressedKey
                 Case ConsoleKey.LeftArrow
@@ -264,7 +315,7 @@ Module werewolf
             End Select
             
             Try
-                Console.SetCursorPosition(0, Console.CursorTop - (totalFullRows *3) )
+                Console.SetCursorPosition(0, Console.CursorTop - ( (totalFullRows *3) + If(lastRowCount <> 0, 3, 0) ) )
             Catch
                 Try
                     Console.SetCursorPosition(0, 0)
