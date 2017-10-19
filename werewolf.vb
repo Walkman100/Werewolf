@@ -195,12 +195,24 @@ Module werewolf
         
         Do Until 0 <> 0
             For currentRow = 1 To totalFullRows
-                Console.BackgroundColor = ConsoleColor.Black
-                Console.ForegroundColor = ConsoleColor.Green
-                Console.WriteLine(New String("#", intCardWidth * columns))
+                For currentColumn = 1 to columns ' NOT index-based!
+                    currentIndex = ( (currentRow - 1) * columns) + currentColumn
+                    If lstSelectedIndexes.Contains(currentIndex) then
+                        Console.ForegroundColor = ConsoleColor.Yellow
+                    Else
+                        Console.ForegroundColor = ConsoleColor.Green
+                    End If
+                    If intSelectedIndex = currentIndex
+                        Console.BackgroundColor = ConsoleColor.DarkBlue
+                    Else
+                        Console.BackgroundColor = ConsoleColor.Black
+                    End If
+                    Console.Write(New String("#", intCardWidth))
+                Next
+                Console.WriteLine()
                 
                 For currentColumn = 1 to columns
-                    currentIndex = ( (currentRow - 1) * columns) + currentColumn ' NOT index-based!
+                    currentIndex = ( (currentRow - 1) * columns) + currentColumn
                     If lstSelectedIndexes.Contains(currentIndex) then
                         Console.ForegroundColor = ConsoleColor.Yellow
                     Else
@@ -213,10 +225,23 @@ Module werewolf
                     End If                                  ' \/ Account for 1-basedness             \/ Account for leading and trailing #'s and space
                     Console.Write("# " & lstCards(currentIndex-1).Item("name").PadRight(intCardWidth - 3) & "#")
                 Next
+                Console.WriteLine()
                 
-                Console.BackgroundColor = ConsoleColor.Black
-                Console.ForegroundColor = ConsoleColor.Green
-                Console.WriteLine(vbNewLine & New String("#", intCardWidth * columns))
+                For currentColumn = 1 to columns
+                    currentIndex = ( (currentRow - 1) * columns) + currentColumn
+                    If lstSelectedIndexes.Contains(currentIndex) then
+                        Console.ForegroundColor = ConsoleColor.Yellow
+                    Else
+                        Console.ForegroundColor = ConsoleColor.Green
+                    End If
+                    If intSelectedIndex = currentIndex
+                        Console.BackgroundColor = ConsoleColor.DarkBlue
+                    Else
+                        Console.BackgroundColor = ConsoleColor.Black
+                    End If
+                    Console.Write(New String("#", intCardWidth))
+                Next
+                Console.WriteLine()
             Next
             
             Dim pressedKey As Int32 = Console.ReadKey(True).Key
