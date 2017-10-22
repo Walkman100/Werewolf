@@ -17,7 +17,7 @@ Module werewolf
             Console.WriteLine()
             If tmpString = "N" Or tmpString = "0" ' # relates to 0 for some reason. So does \ and probably a few other characters but that's fine.
                 Console.Write("Enter amount of players: ")
-                Start(Console.ReadLine())
+                Start(Console.ReadLine(), True)
             ElseIf tmpString = "P" Or tmpString = "A"
                 InputPlayerNames()
             Else
@@ -30,24 +30,24 @@ Module werewolf
                 Case "-h", "--help", "-?", "/?"
                     WriteUsage()
                 Case "-n", "--numbers", "-#", "--amount"
-                    If args.length > 1 Then: Start(args(1))
+                    If args.length > 1 Then: Start(args(1), True)
                     Else: Console.Write("Enter amount of players: ")
-                           Start(Console.ReadLine())
+                           Start(Console.ReadLine(), True)
                     End If
                 Case "-p", "--players", "-a", "--names"
                     If args.length > 1 Then
                         For Each name In args(1).Split(",")
                             lstPlayerNames.Add(name)
                         Next
-                        Start(lstPlayerNames.Count, False)
+                        Start(lstPlayerNames.Count)
                     Else: InputPlayerNames()
                     End If
                 Case "-l", "--load", "-f", "--file"
                     If args.length > 1 Then: LoadPlayerNames(args(1))
-                        Start(lstPlayerNames.Count, False)
+                        Start(lstPlayerNames.Count)
                     Else: Console.Write("Enter path to load names from: ")
                            LoadPlayerNames(Console.ReadLine())
-                           Start(lstPlayerNames.Count, False)
+                           Start(lstPlayerNames.Count)
                     End If
                 Case Else
                     Console.WriteLine("Unrecognised flag """ & args(0) & """!")
@@ -114,7 +114,7 @@ Module werewolf
             End If
             tmpString = Console.ReadLine()
         Loop
-        Start(lstPlayerNames.Count, False)
+        Start(lstPlayerNames.Count)
     End Sub
     
     Sub LoadPlayerNames(path As String)
@@ -129,7 +129,7 @@ Module werewolf
         End If
     End Sub
     
-    Sub Start(players As String, Optional generatePlayers As Boolean = True)
+    Sub Start(players As String, Optional generatePlayers As Boolean = False)
         If Not IsNumeric(players)
             Console.WriteLine("""" & players & """ is not a whole number!")
             Exit Sub
@@ -243,7 +243,7 @@ Module werewolf
                 Next
                 Console.WriteLine()
             Next
-            
+
             If lastRowCount <> 0 Then
                 lastRowIndex = totalFullRows * columns
                 For currentColumn = 1 to lastRowCount
@@ -302,9 +302,15 @@ Module werewolf
                 Case ConsoleKey.RightArrow
                     If intSelectedIndex < lstCards.Count Then intSelectedIndex += 1
                 Case ConsoleKey.UpArrow
-                    If intSelectedIndex > 1 Then intSelectedIndex -= columns
+                    If intSelectedIndex > columns Then:
+                        intSelectedIndex -= columns
+                    Else: If intSelectedIndex > 1 Then intSelectedIndex = 1
+                    End If
                 Case ConsoleKey.DownArrow
-                    If intSelectedIndex < lstCards.Count Then intSelectedIndex += columns
+                    If intSelectedIndex < lstCards.Count-columns Then:
+                        intSelectedIndex += columns
+                    Else: If intSelectedIndex < lstCards.Count Then intSelectedIndex = lstCards.Count
+                    End If
                 Case ConsoleKey.Spacebar, ConsoleKey.Enter
                     If lstSelectedIndexes.Contains(intSelectedIndex) Then: _
                         lstSelectedIndexes.Remove(intSelectedIndex)
