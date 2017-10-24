@@ -5,9 +5,10 @@ Imports System.Xml
 
 Module werewolf
     Dim tmpString As String = ""
-    Dim cardOptions As String = ""
-    Dim lstPlayerNames As New List(Of String)
-    Dim lstCards As New List(Of Dictionary(Of String, String))
+    Dim selectAll As Boolean = False
+    Dim cardOptions      As New List(Of String)
+    Dim lstPlayerNames   As New List(Of String)
+    Dim lstCards         As New List(Of Dictionary(Of String, String))
     Dim lstSelectedCards As New List(Of Dictionary(Of String, String))
     
     Sub Main(args As String())
@@ -25,7 +26,11 @@ Module werewolf
             End If
             
         Else
-            If args.length > 2 Then cardOptions = args(2)
+            If args.length > 2 Then
+                For i = 2 To args.length - 1
+                    cardOptions.Add(args(i))
+                Next
+            End If
             Select case args(0)
                 Case "-h", "--help", "-?", "/?"
                     WriteUsage()
@@ -73,11 +78,14 @@ Module werewolf
         flags &= " -l, --load [file]".PadRight(35) & " Use player names and load from `file`" & vbNewLine
         flags &= " -f, --file [file]".PadRight(35) & "  Same as -l" & vbNewLine & vbNewLine
         flags &= "CARDOPTIONS: (option argument above has to be supplied to use these)" & vbNewLine
-        flags &= " -c, -a".PadRight(35) & " Use card names" & vbNewLine
         flags &= " -n, -#".PadRight(35) & " Use card numbers" & vbNewLine
+        flags &= " -c, -a".PadRight(35) & " Use card names" & vbNewLine
+        flags &= " -l, --load [file]".PadRight(35) & " Load card names from `file`" & vbNewLine
+        flags &= " -s, -sa, --all".PadRight(35) & " Select all cards & skip card selection CUI (Console UI)" & vbNewLine
         flags &= vbNewLine & "Examples:" & vbNewLine
-        flags &= "  " & programFile & " -n 10 -n".PadRight(25) & "Use card numbers for 10 players identified by numbers" & vbNewLine
-        flags &= "  " & programFile & " -p Larry,Jane,Robert -c".PadRight(25) & "Use card names for 3 players identified by names"
+        flags &= "  " & programFile & " -n 10 -n".PadRight(27) & "Use card numbers for 10 players identified by numbers" & vbNewLine
+        flags &= "  " & programFile & " -p Larry,Jane,Robert -c".PadRight(27) & "Use card names for 3 players identified by names" & vbNewLine
+        flags &= "  " & programFile & " -n 2 -c -l cards2.xml -sa".PadRight(27) & ""
         
         Console.WriteLine(flags)
     End Sub
@@ -134,19 +142,33 @@ Module werewolf
             Next
         End If
         
-        If cardOptions = ""
+        If cardOptions.Count = 0 Then
             Console.Write("Use Card nAmes or Numbers? (c/a/n/#): ")
             tmpString = Console.ReadKey().Key.ToString
             Console.WriteLine()
         Else
-            If cardOptions.StartsWith("-") And cardOptions.Length > 1
-                tmpString = cardOptions.Substring(1).ToUpper
-                If tmpString = "#" Then tmpString = "0"
-            Else
-                Console.Write("Use Card nAmes or Numbers? (c/a/n/#): ")
-                tmpString = Console.ReadKey().Key.ToString
-                Console.WriteLine()
-            End If
+            Dim nextOption As String = ""
+
+            For Each cardOption In cardOptions
+                If nextOption = "load" Then
+                    lstCards = ReadCardXML(cardOption)
+                    nextOption = ""
+                Else
+                    Select Case cardOption.ToString
+                        Case "-n", "-#", "-c", "-a"
+                            tmpString = cardOption.Substring(1).ToUpper
+                            If tmpString = "#" Then tmpString = "0"
+                        Case "-l", "--load"
+                            nextOption = "load"
+                        Case "-s", "-sa", "--all"
+                            selectAll = True
+                        Case Else
+                            Console.Write("Use Card nAmes or Numbers? (c/a/n/#): ")
+                            tmpString = Console.ReadKey().Key.ToString
+                            Console.WriteLine()
+                    End Select
+                End If
+            Next
         End If
         
         If tmpString = "N" Or tmpString = "0" ' # relates to 0 for some reason. So does \ and probably a few other characters but that's fine.
@@ -157,7 +179,11 @@ Module werewolf
             Next
         ElseIf tmpString = "C" Or tmpString = "A"
             If lstCards.Count = 0 Then lstCards = ReadCardXML("cards.xml")
-            SelectCards()
+            If selectAll Then
+                lstSelectedCards = lstCards
+            Else
+                SelectCards()
+            End If
             RandomiseCards(players)
             j = 0
             For Each cardDict In lstSelectedCards
