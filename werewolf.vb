@@ -57,16 +57,13 @@ Module werewolf
     End Sub
     
     Sub WriteUsage()
-        Dim flags As String = " [OPTION [OPTIONARGUMENT] [CARDOPTION]]" & vbNewLine & "Tools to help with Werewolf Narrating - https://github.com/Walkman100/Werewolf" & vbNewLine
+        Dim flags As String = " [OPTION [OPTIONARGUMENT] [CARDOPTIONS]]" & vbNewLine & "Tools to help with Werewolf Narrating - https://github.com/Walkman100/Werewolf" & vbNewLine
         Dim programPath As String = System.Reflection.Assembly.GetExecutingAssembly().CodeBase
+        Dim programFile As String = programPath.Substring(programPath.LastIndexOf("/") +1)
         If My.Computer.Info.OSPlatform = "Unix" Then
-            Console.WriteLine("Usage: mono " & programPath.Substring(programPath.LastIndexOf("/") +1) & flags)
-        ElseIf My.Computer.Info.OSPlatform = "Win32NT" Then
-            Console.WriteLine("Usage: " & programPath.Substring(programPath.LastIndexOf("/") +1) & flags)
-        Else
-            Console.WriteLine("Unrecognised platform """ & My.Computer.Info.OSPlatform & """! Please report at https://github.com/Walkman100/Werewolf/issues/new")
-            Console.WriteLine("Default usage info: " & System.Diagnostics.Process.GetCurrentProcess.ProcessName & ".exe" & flags)
+            programFile = "mono " & programFile
         End If
+        Console.WriteLine("Usage: " & programFile & flags)
         
         flags  = " -h, --help".PadRight(35)                        & " Show this help" & vbNewLine
         flags &= " -n, --numbers [number of players]".PadRight(35) & " Use player numbers" & vbNewLine
@@ -79,13 +76,8 @@ Module werewolf
         flags &= " -c, -a".PadRight(35) & " Use card names" & vbNewLine
         flags &= " -n, -#".PadRight(35) & " Use card numbers" & vbNewLine
         flags &= vbNewLine & "Examples:" & vbNewLine
-        If My.Computer.Info.OSPlatform = "Unix" Then
-            flags &= "  mono " & programPath.Substring(programPath.LastIndexOf("/") +1) & " -n 10 -n".PadRight(25) & "Use card numbers for 10 players identified by numbers" & vbNewLine
-            flags &= "  mono " & programPath.Substring(programPath.LastIndexOf("/") +1) & " -p Larry,Jane,Robert -c".PadRight(25) & "Use card names for 3 players identified by names"
-        ElseIf My.Computer.Info.OSPlatform = "Win32NT" Then
-            flags &= "  " & programPath.Substring(programPath.LastIndexOf("/") +1) & " -n 10 -n".PadRight(25) & "Use card numbers for 10 players identified by numbers" & vbNewLine
-            flags &= "  " & programPath.Substring(programPath.LastIndexOf("/") +1) & " -p Larry,Jane,Robert -c".PadRight(25) & "Use card names for 3 players identified by names"
-        End If
+        flags &= "  " & programFile & " -n 10 -n".PadRight(25) & "Use card numbers for 10 players identified by numbers" & vbNewLine
+        flags &= "  " & programFile & " -p Larry,Jane,Robert -c".PadRight(25) & "Use card names for 3 players identified by names"
         
         Console.WriteLine(flags)
     End Sub
@@ -175,7 +167,7 @@ Module werewolf
                 End If
             Next
         Else
-            Console.WriteLine("""" & tmpString & """ isn't any of the valid inputs!")
+            Console.WriteLine("""" & tmpString & """ isn't any of the valid inputs! (c/a/n/#)")
         End If
         
         If My.Computer.Info.OSPlatform = "Win32NT" Then
@@ -243,7 +235,7 @@ Module werewolf
                 Next
                 Console.WriteLine()
             Next
-
+            
             If lastRowCount <> 0 Then
                 lastRowIndex = totalFullRows * columns
                 For currentColumn = 1 to lastRowCount
@@ -302,17 +294,15 @@ Module werewolf
                 Case ConsoleKey.RightArrow
                     If intSelectedIndex < lstCards.Count Then intSelectedIndex += 1
                 Case ConsoleKey.UpArrow
-                    If intSelectedIndex > columns Then:
-                        intSelectedIndex -= columns
+                    If intSelectedIndex > columns Then: intSelectedIndex -= columns
                     Else: If intSelectedIndex > 1 Then intSelectedIndex = 1
                     End If
                 Case ConsoleKey.DownArrow
-                    If intSelectedIndex < lstCards.Count-columns Then:
-                        intSelectedIndex += columns
+                    If intSelectedIndex < lstCards.Count-columns Then: intSelectedIndex += columns
                     Else: If intSelectedIndex < lstCards.Count Then intSelectedIndex = lstCards.Count
                     End If
                 Case ConsoleKey.Spacebar, ConsoleKey.Enter
-                    If lstSelectedIndexes.Contains(intSelectedIndex) Then: _
+                    If lstSelectedIndexes.Contains(intSelectedIndex) Then:
                         lstSelectedIndexes.Remove(intSelectedIndex)
                     Else: lstSelectedIndexes.Add(intSelectedIndex)
                     End If
