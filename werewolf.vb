@@ -91,12 +91,12 @@ Module werewolf
     End Sub
     
     Sub InputPlayerNames()
-        Console.WriteLine("Enter player names. Type 'done', 'exit' or 'd' when done." _
+        Console.WriteLine("Enter player names. Type 'done', 'exit', 'd' or ^D when done." _
             & " Type 'save' or 'save <path>' to save the list of names to file." _
             & " Type 'load' or 'load <path>' to load the list of names from file:")
-        tmpString = Console.ReadLine()
         Do Until 0 <> 0
-            If tmpString = "done" Or tmpString = "exit" Or tmpString = "d"
+            tmpString = Console.ReadLine()
+            If tmpString = "done" Or tmpString = "exit" Or tmpString = "d" Or tmpString Is Nothing
                 Exit Do
             ElseIf tmpString = "save"
                 Console.Write("Enter file name/location to save to: ")
@@ -112,7 +112,6 @@ Module werewolf
             Else
                 lstPlayerNames.Add(tmpString)
             End If
-            tmpString = Console.ReadLine()
         Loop
         Start(lstPlayerNames.Count)
     End Sub
@@ -211,7 +210,7 @@ Module werewolf
         totalFullRows = lstCards.Count \ columns
         lastRowCount = lstCards.Count - (totalFullRows * columns)
         
-        Console.WriteLine("Select cards; Use arrow keys to navigate, Enter or Spacebar to (Un)select, Q/D/E/Esc to finish:")
+        Console.WriteLine("Select cards; Use arrow keys to navigate, Enter or Spacebar to (Un)select, Q/D/E/Esc/^D to finish:")
         
         Do Until 0 <> 0
             For currentRow = 1 To totalFullRows
