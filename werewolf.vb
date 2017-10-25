@@ -85,7 +85,7 @@ Module werewolf
         flags &= vbNewLine & "Examples:" & vbNewLine
         flags &= "  " & programFile & " -n 10 -n".PadRight(27) & "Use card numbers for 10 players identified by numbers" & vbNewLine
         flags &= "  " & programFile & " -p Larry,Jane,Robert -c".PadRight(27) & "Use card names for 3 players identified by names" & vbNewLine
-        flags &= "  " & programFile & " -n 2 -c -l cards2.xml -sa".PadRight(27) & ""
+        flags &= "  " & programFile & " -n 2 -c -l cards2.xml -sa".PadRight(27) & "Use all cards from cards2.xml for 2 players identified by numbers"
         
         Console.WriteLine(flags)
     End Sub
@@ -93,7 +93,7 @@ Module werewolf
     Sub InputPlayerNames()
         Console.WriteLine("Enter player names. Type 'done', 'exit' or 'd' when done." _
             & " Type 'save' or 'save <path>' to save the list of names to file." _
-            & " Type 'load' or 'load <path' to load the list of names from file.")
+            & " Type 'load' or 'load <path>' to load the list of names from file:")
         tmpString = Console.ReadLine()
         Do Until 0 <> 0
             If tmpString = "done" Or tmpString = "exit" Or tmpString = "d"
@@ -210,6 +210,8 @@ Module werewolf
         columns = Console.WindowWidth \ intCardWidth
         totalFullRows = lstCards.Count \ columns
         lastRowCount = lstCards.Count - (totalFullRows * columns)
+        
+        Console.WriteLine("Select cards; Use arrow keys to navigate, Enter or Spacebar to (Un)select, Q/D/E/Esc to finish:")
         
         Do Until 0 <> 0
             For currentRow = 1 To totalFullRows
