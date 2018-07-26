@@ -1,4 +1,8 @@
-Option Explicit Off
+Option Explicit On
+Option Strict On
+Option Compare Binary
+Option Infer On
+
 Imports System
 Imports System.Collections.Generic
 Imports System.IO.File
@@ -43,7 +47,7 @@ Module werewolf
                     End If
                 Case "-p", "--players", "-a", "--names"
                     If args.length > 1 Then
-                        For Each name In args(1).Split(",")
+                        For Each name In args(1).Split({","}, StringSplitOptions.RemoveEmptyEntries)
                             lstPlayerNames.Add(name)
                         Next
                         Start(lstPlayerNames.Count)
@@ -131,15 +135,19 @@ Module werewolf
     End Sub
     
     Sub Start(players As String, Optional generatePlayers As Boolean = False)
-        If Not IsNumeric(players)
+        If IsNumeric(players)
+            Start(Convert.ToInt32(players), generatePlayers)
+        Else
             Console.WriteLine("""" & players & """ is not a whole number!")
             Exit Sub
         End If
-        
+    End Sub
+    
+    Sub Start(players As Integer, Optional generatePlayers As Boolean = False)
         If generatePlayers
             lstPlayerNames.Clear()
-            For i = 1 to players
-                lstPlayerNames.Add(i)
+            For i As Integer = 1 to players
+                lstPlayerNames.Add(i.ToString)
             Next
         End If
         
@@ -172,6 +180,7 @@ Module werewolf
             Next
         End If
         
+        Dim j As Integer
         If tmpString = "N" Or tmpString = "0" ' # relates to 0 for some reason. So does \ and probably a few other characters but that's fine.
             j = 0
             For Each i In GenerateRandomList(players)
@@ -213,12 +222,14 @@ Module werewolf
         Dim lstSelectedIndexes As New List(Of Integer)
         Dim intCardWidth As Integer = 26
         
-        columns = Console.WindowWidth \ intCardWidth
-        totalFullRows = lstCards.Count \ columns
-        lastRowCount = lstCards.Count - (totalFullRows * columns)
+        Dim columns = Console.WindowWidth \ intCardWidth
+        Dim totalFullRows = lstCards.Count \ columns
+        Dim lastRowCount = lstCards.Count - (totalFullRows * columns)
         
         Console.WriteLine("Select cards; Use arrow keys to navigate, Enter or Spacebar to Un/select, Q/D/E/Esc/^D to finish:")
         
+        Dim currentIndex As Integer
+        Dim lastRowIndex As Integer
         Do Until 0 <> 0
             For currentRow = 1 To totalFullRows
                 For currentColumn = 1 to columns ' NOT index-based!
@@ -233,7 +244,7 @@ Module werewolf
                     Else
                         Console.BackgroundColor = ConsoleColor.Black
                     End If
-                    Console.Write(New String("#", intCardWidth))
+                    Console.Write(New String(Char.Parse("#"), intCardWidth))
                 Next
                 Console.WriteLine()
                 
@@ -265,7 +276,7 @@ Module werewolf
                     Else
                         Console.BackgroundColor = ConsoleColor.Black
                     End If
-                    Console.Write(New String("#", intCardWidth))
+                    Console.Write(New String(Char.Parse("#"), intCardWidth))
                 Next
                 Console.WriteLine()
             Next
@@ -284,7 +295,7 @@ Module werewolf
                     Else
                         Console.BackgroundColor = ConsoleColor.Black
                     End If
-                    Console.Write(New String("#", intCardWidth))
+                    Console.Write(New String(Char.Parse("#"), intCardWidth))
                 Next
                 Console.WriteLine()
                 
@@ -316,7 +327,7 @@ Module werewolf
                     Else
                         Console.BackgroundColor = ConsoleColor.Black
                     End If
-                    Console.Write(New String("#", intCardWidth))
+                    Console.Write(New String(Char.Parse("#"), intCardWidth))
                 Next
                 Console.WriteLine()
             End If
@@ -357,7 +368,7 @@ Module werewolf
         Console.ResetColor
         
         lstSelectedCards.Clear()
-        j = 1
+        Dim j = 1
         For Each cardDict in lstCards
             If lstSelectedIndexes.Contains(j) then
                 lstSelectedCards.Add(cardDict)
