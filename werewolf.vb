@@ -209,9 +209,9 @@ Module werewolf
     End Sub
     
     Sub SelectCards()
-        Dim intSelectedIndex As Int32 = 1 ' NOTE (IMPORTANT) all the *Index variables here are not index-based! they are 1-based
-        Dim lstSelectedIndexes As New List(Of Int32)
-        Dim intCardWidth As Int32 = 26
+        Dim intSelectedIndex As Integer = 1 ' NOTE (IMPORTANT) all the *Index variables here are not index-based! they are 1-based
+        Dim lstSelectedIndexes As New List(Of Integer)
+        Dim intCardWidth As Integer = 26
         
         columns = Console.WindowWidth \ intCardWidth
         totalFullRows = lstCards.Count \ columns
@@ -321,7 +321,7 @@ Module werewolf
                 Console.WriteLine()
             End If
             
-            Dim pressedKey As Int32 = Console.ReadKey(True).Key
+            Dim pressedKey As Integer = Console.ReadKey(True).Key
             Select Case pressedKey
                 Case ConsoleKey.LeftArrow
                     If intSelectedIndex > 1 Then intSelectedIndex -= 1
@@ -366,11 +366,11 @@ Module werewolf
         Next
     End Sub
     
-    Sub RandomiseCards(players As Int32)
+    Sub RandomiseCards(players As Integer)
         Dim lstReturnCards As New List(Of Dictionary(Of String, String))
         
         Dim rng As New Random()
-        Dim randomNumber As Int32
+        Dim randomNumber As Integer
         
         If players > lstSelectedCards.Count()
             Do Until lstSelectedCards.Count() = players
@@ -391,14 +391,14 @@ Module werewolf
     ''' <summary>Generates a list of unique random numbers</summary>
     ''' <param name="size">the size of the list to generate</param>
     ''' <returns>a randomised list</returns>
-    Function GenerateRandomList(size As Int32) As List(Of Int32)
-        Dim lstInitial As New List(Of Int32)
-        Dim lstRandom As New List(Of Int32)
+    Function GenerateRandomList(size As Integer) As List(Of Integer)
+        Dim lstInitial As New List(Of Integer)
+        Dim lstRandom As New List(Of Integer)
         For i = 1 to size
             lstInitial.Add(i)
         Next
         Dim rng As New Random()
-        Dim randomNumber As Int32
+        Dim randomNumber As Integer
         For i = 1 to size
             randomNumber = rng.Next(lstInitial.Count())
             lstRandom.Add(lstInitial(randomNumber)) ' lstInitial.Item()
