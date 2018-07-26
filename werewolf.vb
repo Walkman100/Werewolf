@@ -1,7 +1,9 @@
 Option Explicit Off
+Imports System
 Imports System.Collections.Generic
 Imports System.IO.File
 Imports System.Xml
+Imports Microsoft.VisualBasic
 
 Module werewolf
     Dim tmpString As String = ""
@@ -196,8 +198,13 @@ Module werewolf
         End If
         
         If My.Computer.Info.OSPlatform = "Win32NT" Then
-            Console.Write("Done! Press any key to continue . . . ")
-            Console.ReadKey()
+            Try
+                Console.Write("Done! Press any key to continue . . . ")
+                Console.ReadKey()
+            Catch
+                Console.WriteLine(vbNewLine & "Error detecting key! Press enter to continue . . . ")
+                Console.ReadLine()
+            End Try
         End If
     End Sub
     
@@ -210,7 +217,7 @@ Module werewolf
         totalFullRows = lstCards.Count \ columns
         lastRowCount = lstCards.Count - (totalFullRows * columns)
         
-        Console.WriteLine("Select cards; Use arrow keys to navigate, Enter or Spacebar to (Un)select, Q/D/E/Esc/^D to finish:")
+        Console.WriteLine("Select cards; Use arrow keys to navigate, Enter or Spacebar to Un/select, Q/D/E/Esc/^D to finish:")
         
         Do Until 0 <> 0
             For currentRow = 1 To totalFullRows
@@ -405,9 +412,8 @@ Module werewolf
         Dim reader As XmlReader = XmlReader.Create(path)
         Try
             reader.Read()
-        Catch ex As XmlException
+        Finally
             reader.Close
-            Exit Function
         End Try
         
         Dim elementAttribute As String
