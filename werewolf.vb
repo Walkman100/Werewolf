@@ -102,7 +102,7 @@ Module werewolf
             & " Type 'load' or 'load <path>' to load the list of names from file:")
         Do Until 0 <> 0
             tmpString = Console.ReadLine()
-            If tmpString = "done" Or tmpString = "exit" Or tmpString = "d" Or tmpString Is Nothing
+            If tmpString = "done" Or tmpString = "exit" Or tmpString = "d" Or tmpString Is Nothing Or tmpString = ""
                 Exit Do
             ElseIf tmpString = "save"
                 Console.Write("Enter file name/location to save to: ")
@@ -423,8 +423,9 @@ Module werewolf
         Dim reader As XmlReader = XmlReader.Create(path)
         Try
             reader.Read()
-        Finally
+        Catch ex As XmlException
             reader.Close
+            Throw
         End Try
         
         Dim elementAttribute As String
